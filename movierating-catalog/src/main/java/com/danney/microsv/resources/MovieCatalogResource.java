@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/catalog")
 public class MovieCatalogResource {
-    private String movieUrl = "http://localhost:8082/movies/";
-    private String ratingsUrl = "http://localhost:8083/ratingsdata/";
+    private String movieUrl = "//MOVIERATING-MOVIES-SERVICE/movies/";
+    private String ratingsUrl = "//MOVIERATING-RATINGS-SERVICE/ratingsdata/";
 
     @Autowired
     private RestTemplate restTmpl;
