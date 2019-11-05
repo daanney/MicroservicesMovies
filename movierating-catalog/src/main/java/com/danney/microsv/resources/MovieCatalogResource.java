@@ -44,7 +44,7 @@ public class MovieCatalogResource {
             Movie m = wcBuilder.build().get()
                     .uri(movieUrl + rating.getMovieId())
                     .retrieve().bodyToMono(Movie.class)
-                    .block();
+                    .block(); // block is removing the reactive part
 
             return new CatalogItem(m.getName(), "Some Description", rating.getRating());
         }).collect(Collectors.toList());
