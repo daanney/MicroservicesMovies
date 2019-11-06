@@ -5,6 +5,7 @@ import com.danney.microsv.models.CatalogItem;
 import com.danney.microsv.models.Movie;
 import com.danney.microsv.models.UserRating;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,14 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/catalog")
 public class MovieCatalogResource {
-    private String movieUrl = "//MOVIERATING-MOVIES-SERVICE/movies/";
-    private String ratingsUrl = "//MOVIERATING-RATINGS-SERVICE/ratingsdata/";
+
+    @Value("rest.service.movies.url")
+    private String movieUrl;
+
+    @Value("rest.service.ratings.url")
+    private String ratingsUrl;
+
+    @Value("rest.request.default_timeout")
+    private long requestTimeout;
 
     @Autowired
     private RestTemplate restTmpl;
@@ -44,6 +53,7 @@ public class MovieCatalogResource {
             Movie m = wcBuilder.build().get()
                     .uri(movieUrl + rating.getMovieId())
                     .retrieve().bodyToMono(Movie.class)
+                    .timeout(Duration.ofMillis(requestTimeout))
                     .block(); // block is removing the reactive part
 
             return new CatalogItem(m.getName(), "Some Description", rating.getRating());

@@ -1,16 +1,21 @@
 package com.danney.microsv;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 @EnableEurekaClient
 public class CatalogApplication {
+
+	@Value("rest.request.default_timeout")
+	private int requestTimeout;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CatalogApplication.class, args);
@@ -19,7 +24,9 @@ public class CatalogApplication {
 	@Bean
 	@LoadBalanced
 	public RestTemplate getRestTemplate() {
-		return new RestTemplate();
+		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		factory.setConnectTimeout(requestTimeout);
+		return new RestTemplate(factory);
 	}
 
 	@Bean

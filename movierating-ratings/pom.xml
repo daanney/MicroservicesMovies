@@ -11,8 +11,8 @@
 	<groupId>com.danney.microsv</groupId>
 	<artifactId>movierating-ratings</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ratings</name>
-	<description>Demo project for Spring Boot</description>
+	<name>RatingsMicroService</name>
+	<description></description>
 
 	<properties>
 		<java.version>11</java.version>
