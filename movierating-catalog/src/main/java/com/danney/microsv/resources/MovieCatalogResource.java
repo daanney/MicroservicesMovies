@@ -50,13 +50,13 @@ public class MovieCatalogResource {
             // Movie m = restTmpl.getForObject(movieUrl + rating.getMovieId(), Movie.class);
 
             // "New" (reactive) way using webclient builder
-            Movie m = wcBuilder.build().get()
+            Movie movie = wcBuilder.build().get()
                     .uri(movieUrl + rating.getMovieId())
                     .retrieve().bodyToMono(Movie.class)
                     .timeout(Duration.ofMillis(requestTimeout))
                     .block(); // block is removing the reactive part
 
-            return new CatalogItem(m.getName(), "Some Description", rating.getRating());
+            return new CatalogItem(movie, rating);
         }).collect(Collectors.toList());
 
         return new Catalog(items);

@@ -1,37 +1,30 @@
 package com.danney.microsv.models;
 
 public class CatalogItem {
-    private String name;
-    private String desc;
-    private int rating;
+    private Movie movie;
+    private Rating rating;
 
-    public CatalogItem(String name, String desc, int rating) {
-        this.name = name;
-        this.desc = desc;
+    public CatalogItem() {
+    }
+
+    public CatalogItem(Movie movie, Rating rating) {
+        this.movie = movie;
         this.rating = rating;
     }
 
-    public String getName() {
-        return name;
+    public Movie getMovie() {
+        return movie;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public int getRating() {
+    public Rating getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Rating rating) {
         this.rating = rating;
     }
 }
