@@ -24,7 +24,8 @@ public class RatingsResource {
         UserRating ur = new UserRating();
         ur.setRatings(Arrays.asList(
                 new Rating("100", 4),
-                new Rating("550", 3)
+                new Rating("550", 3),
+                new Rating("222", 5)
         ));
         return ur;
     }
