@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class MovieInfo {
@@ -23,6 +25,8 @@ public class MovieInfo {
 
     @Autowired
     private WebClient.Builder wcBuilder;
+
+    private Map<String, Movie> moviesCache = new HashMap<>();
 
     @HystrixCommand(
         fallbackMethod = "getFallbackCatalogItem",
@@ -37,17 +41,21 @@ public class MovieInfo {
         }
     )
     public CatalogItem getCatalogItem(Rating rating) {
-        // Get the Movie of rating
+        Movie movie = moviesCache.get(rating.getMovieId());
 
-        // old way - RestTemplate
-        // Movie m = restTmpl.getForObject(movieUrl + rating.getMovieId(), Movie.class);
+        if(null == movie) {
+            // old way - RestTemplate
+            // Movie m = restTmpl.getForObject(movieUrl + rating.getMovieId(), Movie.class);
 
-        // "New" (reactive) way using webclient builder
-        Movie movie = wcBuilder.build().get()
-            .uri(movieUrl + rating.getMovieId())
-            .retrieve().bodyToMono(Movie.class)
-            .timeout(Duration.ofMillis(requestTimeout))
-            .block(); // block is removing the reactive part
+            // "New" (reactive) way using webclient builder
+            movie = wcBuilder.build().get()
+                .uri(movieUrl + rating.getMovieId())
+                .retrieve().bodyToMono(Movie.class)
+                .timeout(Duration.ofMillis(requestTimeout))
+                .block(); // block is removing the reactive part
+            moviesCache.put(rating.getMovieId(), movie);
+        }
+
         return new CatalogItem(movie, rating);
     }
 
